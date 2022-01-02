@@ -82,6 +82,9 @@ https://blog.danniranderis.dk/2021/12/16/danish-christmas-ctf-2021-by-nc3-police
 
 https://blog.danniranderis.dk/2021/12/16/danish-christmas-ctf-2021-by-nc3-police-intermediary-dangerzone-1-4/
 
+## Fra Søren Holm
+[bob](community-writeups/SGH/bob.md)
+
 &nbsp;
 
 Skriv og lær fra dig! Vi modtager meget gerne [pull requests](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
