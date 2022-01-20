@@ -1,0 +1,19 @@
+Cyber Invasion 2o21
+
+1. Hent spillet her.
+
+2. Gå derefter til vores boks på TryHackMe:
+
+https://tryhackme.com/jr/nc3ctf2021cyberinvasion2o21
+
+3. Start boksen, og noter IP adressen.
+
+4. Kør spillet og indtast den IP, som boksen fik.
+
+5. Slå highscoren på EN MILLION!
+
+
+Hints:
+A. Kender du dnspy (https://github.com/dnSpy/dnSpy/releases) ?
+B. Vidste du at man kan ændre spillets kode via dnspy?
+C. Hvor mange point kan man sende i 1 pakke til target?
