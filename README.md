@@ -32,7 +32,8 @@ Hele dage og sene nattetimer blev taget i brug når de mere end 1100 deltagere l
 
 # Opgaver
 
-Vi har virkelig prøvet at lave opgaver meget ekstrem varierende sværhedsgrader. Opgaverne er derfor inddelt i kategorierne: Begynder, Øvet og Svær. I år havde vi også nogle opgaver fra community'et, repræsenteret af CTF-holdet [Kalmarunionen](https://www.kalmarunionen.dk/). Det er vores håb at især "Begynder"-opgaverne kan blive en introduktion til IT-sikkerhed for folk, der endnu ikke har åbnet en HEX editor.
+Vi har virkelig prøvet at lave opgaver 
+med ekstrem varierende sværhedsgrader. Opgaverne er derfor inddelt i kategorierne: Begynder, Øvet og Svær. I år havde vi også nogle opgaver fra community'et, repræsenteret af CTF-holdet [Kalmarunionen](https://www.kalmarunionen.dk/). Det er vores håb at især "Begynder"-opgaverne kan blive en introduktion til IT-sikkerhed for folk, der endnu ikke har åbnet en HEX editor.
 
 Opgaverne kan hentes [her](opgaver), men ellers kører [hjemmesiden](https://www.nc3ctf.dk) videre i Q1 2022.
 
