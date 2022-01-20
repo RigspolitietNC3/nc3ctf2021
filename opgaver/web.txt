@@ -1,0 +1,13 @@
+WEB - Find Teksten
+WEB - Blacklist
+WEB - Sproget
+
+Denne udfordring er en hjemmeside, der kører på din egen instans af en maskine, som du selv starter på TryHackMe.com (THM). På THM er der flere forskellige "rooms", som man kan hacke. Dette foregår via en VPN ind i THM's infrastruktur. Vi har lavet et sådant rum på THM til vores WEB-udfordringer. Du skal derfor være bruger på THM. Dette er gratis, og når du har en bruger, kan du derefter benytte dette link til vores rum/boks/maskine:
+
+https://tryhackme.com/jr/nc3ctf2021web
+
+Det lyder måske kompliceret at komme i gang med, men så snart man er forbundet til THM's netværk, er det kun at starte maskinen på THM, og indtaste dennes IP Adresse i en browser, efterfulgt af opgavens port. F.eks.:
+
+http://10.100.13.13:3002
+
+God fornøjelse.
