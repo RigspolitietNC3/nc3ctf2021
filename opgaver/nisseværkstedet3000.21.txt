@@ -1,9 +1,0 @@
-JuleKATALOG 3000.21
-
-Uhh, det STORE julekatalog er udkommet. Nu i en "W1ND0WS Edition".
-
-Download .exe filen og find sårbarheden. Udnyt derefter sårbarheden mod target, der er hostet på TryHackMe.com:
-
-https://tryhackme.com/jr/nc3ctfjulekatalog300021
-
-Udkom 9. december kl. 10:00.

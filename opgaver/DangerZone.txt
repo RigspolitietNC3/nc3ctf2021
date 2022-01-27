@@ -1,8 +1,0 @@
-Er du parat til The DangerZone?! Prøv vores Boot2Root på TryHackMe?:
-
-https://tryhackme.com/jr/dangerzone
-
-
-
-Hint til 2/4:
-"Findes der andre injections end SQL?"
