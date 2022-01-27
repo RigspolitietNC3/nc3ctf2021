@@ -1,0 +1,67 @@
+::. #nc3ctf2021 -> Nisseminder
+-------------------------------------------------------------------------------
+
+En forensic opgave, der er tiltænkt at blive løst med Volatility.
+
+Normalt er disse opgaver i CTF'er til Windows, måske især fordi Volatility har utallige kommandoer til netop Wndows. Det ville derfor være sjovt at komme med et image til Linux, så folk kunne opleve hvor omfattende det er.
+
+Udfordringen er primært at få lavet en "Linux Profile" til netop den kerne version, som imaget er taget fra. I opgaven identificeres dette med en grep efter "uname". Derefter hentes linux headers til denne kernel:
+
+	apt-get install linux-headers-4.15.0-161-generic
+
+
+Kør volatility2 med denne profil. På operettelsestidspunktet kunne Volatility3 ikke lave en simpel "linux_bash", så version 2 blev brugt i stedet:
+
+
+$ python2 volatility/vol.py --plugins=profiles --profile=Linux4_15_0-161-generic_profilex64 -f nisseminder2021 linux_bash
+
+Pid      Name                 Command Time                   Command
+-------- -------------------- ------------------------------ -------
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   cmd
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   powershell
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   xxd jul.txt.enc
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   HA!
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   exit
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   exit
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   openssl enc -aes-256-cbc -nosalt -e -in jul.txt -out jul.txt.enc -K '4b404e5f4a65475f4875736b335f645f6865725f6b4f64656f72643f3f3f3f3f' -iv '2d4e4333435446326f32314a554c212d'
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   cd c:\windows
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   ls
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   exit
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   ??HH NEJ, det er jo LINUX
+    1516 bash                 2021-11-03 13:12:45 UTC+0000   rm jul.txt
+    1516 bash                 2021-11-03 13:12:52 UTC+0000   sudo cat /etc/shadow
+    1516 bash                 2021-11-03 13:13:06 UTC+0000   cat jul.txt.enc 
+    1516 bash                 2021-11-03 13:13:11 UTC+0000   xxd jul.txt.enc 
+    1516 bash                 2021-11-03 13:13:23 UTC+0000   sudo ./avml nisseminder2021
+
+
+Så der må findes en fil, der hedder "jul.txt.env", og da det netop er blevet læst - både af "cat" og "xxd", så håber vi at den er i hukommelsen:
+
+
+
+
+$ python2 volatility/vol.py --plugins=profiles --profile=Linux4_15_0-161-generic_profilex64 -f nisseminder2021 linux_enumerate_files | grep "jul.txt"
+
+0xffff898674f5dad0                    923322 /home/storenisse/jul.txt.enc
+
+
+Udtræk denne fil, udfra dens I-node:
+
+$ python2 volatility/vol.py --plugins=profiles --profile=Linux4_15_0-161-generic_profilex64 -f nisseminder2021 linux_find_file -i 0xffff898674f5dad0 -O extracted_jul.txt.enc
+
+
+Se indholdet:
+
+$ xxd extracted_jul.txt.enc 
+00000000: ea35 d55c e184 3429 2f3c af8b cc09 e308  .5.\..4)/<......
+00000010: 6718 511e f46a ff59 78af 7d9e 1dbc cc0b  g.Q..j.Yx.}.....
+00000020: 455e c72c 1626 ceb2 2345 acdc 664c 5174  E^.,.&..#E..fLQt
+
+
+Brug openssl til at dekryptere:
+
+
+
+nc3{ahh_ja_nu_kan_jeg_huske_det}
+
+
