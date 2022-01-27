@@ -1,0 +1,8 @@
+Navn  : CyberChef
+Point : 100 (Begynder)
+Løste : 371
+
+
+Lad os introducere et fedt værktøj: Cyber Chef.
+
+Husk at flaget er inklusiv "nc3{" og til sidst et }-tegn.

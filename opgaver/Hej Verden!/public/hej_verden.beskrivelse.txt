@@ -1,0 +1,6 @@
+Navn  : Hej Verden!
+Point : 200 (Øvet)
+Løste : 264
+
+
+Hvad prøver den nisse at sige?

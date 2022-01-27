@@ -1,0 +1,27 @@
+Introduktion til BrainFuck.
+
+
+Første besked er:
+
+++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++++++++++++++.------------.>+++++++++++++++.>.+++.------.--------.<<+.
+
+Hvis man søger efter dette i en søgemaskine kommer man hurtigt til f.eks.:
+
+	https://en.wikipedia.org/wiki/Brainfuck
+
+Nu ved man at der er tale om dette sprog, og kan derfor lede efter en fortolker. Man finder f.eks.:
+
+	https://www.dcode.fr/brainfuck-language
+
+Herved ser man at resultatet er det klassiske:
+
+	Hello, World!
+
+Når man så tager næste kodede streng:
+
+++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>>++++++++++.-----------.<-------------------.>++++++++++++++++++++++++.--------.--------------.+++++++++.----------.-----.+++++++.++++++.-------.+++++++++++++.-------------.------.++++++++.------.+++++++++++++++++++++.-----------------.+++++++++++++.+++++++++++.
+
+så giver det:
+
+	nc3{send_flere_gaver}
+
