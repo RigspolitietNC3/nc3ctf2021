@@ -1,0 +1,15 @@
+Navn  : David
+Point : 300 (Svær)
+Løste : 12
+
+
+Der er dukket en mystisk besked op i et underligt format, som julenissen nok skal have lidt hjælp til at tyde. Er der mening i bits'ne? Kan den indeholde noget vigtigt? Og hvem er ham der David?
+
+(Der er mellemrum og - i flaget)
+
+
+
+Hint, frigivet 3/12-2021:
+1. Hvad er population count?
+2. Hvad hedder David til EFTERNAVN?
+3. Hvorfor fylder en besked på 248 karakterer 1117 bits?

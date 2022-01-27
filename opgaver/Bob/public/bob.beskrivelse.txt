@@ -1,0 +1,15 @@
+Navn  : Bob
+Point : 300 (Svær)
+Løste : 21
+
+
+"Bob bob bob", var der engang en Nåsåer, der sagde i en julekalender. Men det er vist en helt anden Bob, der er tale om her. Kan du ikke hjælpe nissen lidt med at finde ud af det?
+
+(Der er mellemrum i flaget)
+
+
+
+
+Hints:
+A. Alle ved at nisser elsker "lite" databaser.
+B. Hvilken page-type starter med 0x0D?
