@@ -1,0 +1,41 @@
+WEB 3 - Sproget
+------------------------
+
+Find denne hjemmeside på port 3003
+
+Denne er nok den sværeste WEB opgave af de 3.
+
+
+HTML koden indeholder en Rick Roll:
+
+<!-- Hint: https://rebrand.ly/9wsmj -->
+
+
+
+Når man besøger hjemmesiden, bliver man straks redirected til:
+
+	/index.php?sprog=dansk
+
+Man får at vide at dansk passer til Danmark.
+
+Her vil den nysgerrige prøve at skrive noget anden end "dansk". Dette vil give en fejlbesked, hvor det fremgår at der kigges efter en fil i en undermappe:
+
+	/include_lande
+
+Hvis man går ind i denne mappe ser man disse filer:
+
+	dansk.php
+	index.php
+	nisse.php
+
+Default var jo "dansk". Nu kender vi et andet sprog; "nisse" og kan prøve dette:
+
+	/index.php?sprog=nisse
+
+
+Dette giver os den vigtige lærdom at man taler nisse i Nisseland :
+
+	Nisseland! : nc3{nisser_taler_alle_sprog}
+
+
+:)

@@ -1,0 +1,62 @@
+WEB - Blacklist
+-------------------------------------
+
+Find denne hjemmeside på port 3001
+
+Brugeren får en webside hvor man kan skrive en tekst, der så bliver filtreret af serveren. Man skal prøve at få denne tekst ind:
+
+#nc3ctf2021
+
+Men når man skriver denne tekst, får man bare et tomt resultat tilbage. Vi får koden bag dette, så vi kan analysere den. Programmeringssproget er her i princippet ligegyldigt. Det er mere tankegangen bag, der er interessant:
+
+Koden bag er denne:
+
+    var minTekst = req.body.brugertekst;
+
+    // Filtrer på teksten '#nc3ctf2021':
+    if (minTekst.toLowerCase().includes( '#nc3ctf2021' ) )
+    {
+      // Dvs. erstat teksten med ingenting:
+      minTekst = minTekst.replace( '#nc3ctf2021', '' );
+    }
+
+    // Sammenlign brugerteksten, og vis flaget hvis teksten alligevel slap forbi vores filter:
+    if ( minTekst.localeCompare('#nc3ctf2021') == 0 )
+    {
+      fs.readFile(__dirname + '/flag.txt', 'utf8' , (err, data) => {
+        res.send('Du fandt flaget: ' + data);
+      });
+      return;
+    }
+
+    res.send('Fejl: Din brugertekst gav: ' + minTekst);
+
+
+Vi ser at hvis teksten '#nc3ctf2021' kommer ind, så bliver denne erstattet af '' - dvs. ingenting.
+
+Hvis man f.eks. skriver:
+
+	HEL#nc3ctf2021LO
+
+Så får man resultatet:
+
+	HELLO
+
+
+Det interessante er at den "forbudte" tekst kun bliver fjernet 1 gang. Dvs. at dette virker:
+
+	#nc3c#nc3ctf2021tf2021
+
+Læg mærke til at #nc3ctf2021 er sat ind i en anden #nc3ctf2021 tekst. Dvs. at den en bliver fjernet:
+
+	#nc3c...........tf2021
+
+og bliver erstattet med ingenting, dvs.:
+
+	#nc3ctf2021
+
+
+Når dette sker, får man læst flaget:
+
+
+nc3{intet_filter_kan_holde_mig}

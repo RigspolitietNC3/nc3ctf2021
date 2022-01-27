@@ -1,0 +1,12 @@
+WEB - Find Teksten
+------------------------
+
+Find denne hjemmeside på port 3002
+
+En hjemmeside, hvor flaget er gemt med sort skrift på en sort baggrund. Dvs. at man kan finde flaget ved at markere alt på hjemmesiden med CTRL + A
+
+Alternativt kan man se i HTML koden ved at højre klikke på siden og vælge "View page source" e.l.
+
+Flaget:
+
+nc3{det_her_html_er_da_nemt}

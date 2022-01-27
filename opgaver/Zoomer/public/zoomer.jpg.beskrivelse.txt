@@ -1,0 +1,14 @@
+Navn  : Zoomer
+Point : 200 (Øvet)
+Løste : 143
+
+
+Er du en Zoomer?
+
+
+
+Hints frigivet 3/12-2021:
+-------------------------------------------------------------------------------
+Thumbnails bruges vel kun til "forhåndsvisning" og den slags, ikke?
+
+Måske det kan GÅS igennem BINært?

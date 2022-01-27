@@ -1,0 +1,55 @@
+#nc3ctf2021 -> Zoomer
+-------------------------------------------------------------------------------
+
+En .JPG med en thumbnail, der har en thumbnail, der har en thumbnail, osv.
+
+Konceptet er taget direkte fra INSOMNI'HACK-2015-opgaven "ZoomIn".
+
+
+
+* Et hint om at man kan bruge BINWALK, så prøv det:
+
+
+$ binwalk zoomer.jpg 
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             JPEG image data, EXIF standard
+12            0xC             TIFF image data, big-endian, offset of first image directory: 8
+184           0xB8            JPEG image data, EXIF standard
+196           0xC4            TIFF image data, big-endian, offset of first image directory: 8
+368           0x170           JPEG image data, EXIF standard
+380           0x17C           TIFF image data, big-endian, offset of first image directory: 8
+552           0x228           JPEG image data, EXIF standard
+564           0x234           TIFF image data, big-endian, offset of first image directory: 8
+
+
+
+
+* Alternativt kan man bruge exiftool, der kan udtrække thumbnails:
+
+
+                                                                                                                                              
+└─$ exiftool -b -ThumbnailImage zoomer.jpg > zoomer2.jpg
+Warning: [minor] File contains multi-segment EXIF - zoomer.jpg
+                                                                                                                                              
+└─$ exiftool -b -ThumbnailImage zoomer2.jpg > zoomer3.jpg
+Warning: [minor] File contains multi-segment EXIF - zoomer2.jpg
+                                                                                                                                              
+└─$ exiftool -b -ThumbnailImage zoomer3.jpg > zoomer4.jpg
+Warning: [minor] File contains multi-segment EXIF - zoomer3.jpg
+                                                                                                                                              
+└─$ exiftool -b -ThumbnailImage zoomer4.jpg > zoomer5.jpg
+
+
+
+-rw-r--r-- 1 user user  944285 Oct 29 03:34 zoomer2.jpg
+-rw-r--r-- 1 user user  629745 Oct 29 03:34 zoomer3.jpg
+-rw-r--r-- 1 user user  315255 Oct 29 03:34 zoomer4.jpg
+-rw-r--r-- 1 user user     806 Oct 29 03:35 zoomer5.jpg
+
+
+Denne sidste file, zoomer5.jpg, indeholder flaget:
+
+
+nc3{zoom_zoom}
