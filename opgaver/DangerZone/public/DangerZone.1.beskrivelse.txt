@@ -1,0 +1,7 @@
+Navn  : DangerZone 1/4
+Point : 200 (Øvet)
+Løste : 92
+
+Er du parat til The DangerZone?! Prøv vores Boot2Root på TryHackMe?:
+
+https://tryhackme.com/jr/dangerzone
