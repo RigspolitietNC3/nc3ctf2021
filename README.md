@@ -56,7 +56,7 @@ Vi venter i år med at offentliggøre de officielle writeups til slutningen af j
 
 # Officielle Writeups
 
-Kommer i slutningen af januar 2022.
+Opgaverne har alle en 'writeup' mappe. Se opgaverne [her](opgaver)
 
 
 
