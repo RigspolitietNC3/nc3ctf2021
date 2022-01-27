@@ -1,0 +1,18 @@
+Bitmap Cache
+-------------------------------------------------------------------------------
+Inspireret af Windows RDP cache: 32 billeder skal sættes sammen i den rigtige rækkefølge. Dette gøres ved at se på hvordan de enkelte billeder matcher hinanden. I dette tilfælde er det ved at baggrundsfarven ændrer farve i 1 nuance efter hinanden.
+
+1. Læg alle .BMP filerne i samme mappe som solver scriptet.
+2. Kør scriptet
+3. Resultatet er nu i et nyt billede: result.jpg
+
+
+
+Flag:
+-------------------------------------------------------------------------------
+nc3{det_der_er_bare_så_rigtigt!}
+
+
+Bonus:
+-------------------------------------------------------------------------------
+I mappen create/ ligger det C# program, der blev brugt til at oprette opgaven.

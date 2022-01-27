@@ -1,0 +1,8 @@
+Navn  : Bitmap Cache
+Point : 200 (Øvet)
+Løste : 57
+
+
+Kender I det, at man har en masse små billeder, der måske giver noget større?
+
+Udkom den 9. december kl. 10:00. 
