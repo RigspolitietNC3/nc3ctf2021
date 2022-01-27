@@ -1,0 +1,261 @@
+..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..:
+.                                                                             .
+:.                                                                           .:
+:::          Total Macho - Opgave til #nc3ctf2021 fra Dansk Politi          :::
+:::.                                                                       .:::
+-------------------------------------------------------------------------------
+
+En klassisk reversing opgave hvor brugeren giver et input og får et svar tilbage.
+
+Denne gang til macos i en .ELF fil med MachO-formatet.
+
+Løsningen findes i "total_macho.solver.asm", der både viser krypteringen samt
+hvordan dekrypteringen kan implementeres.
+
+Løsningen er bestemt ikke at brute force, men at implementere koden i omvendt
+rækkefølge. Dvs. en ADD bliver til en SUB, osv.
+
+
+
+::. Tricks
+-------------------------------------------------------------------------------
+
+Den store udfordring skulle være at man ikke kan sætte (software) breakpoints,
+da der laves en hashværdi af programmet - og denne hashværdi bruges i den
+endelige udregning af flaget's korrekte krypterede bytes.
+
+Man kan heller ikke debugge programmet, da PTRACE bruges.
+
+Man kan heller ikke attache en debugger, da en anden PTRACE bruges.
+
+Self-Modifying-Code (SMC), der gør statisk analyse svær.
+
+Flere steder er koden pakket to gange, og andre steder pakker koden sig sammen
+efter brug.
+
+Der bruges AVX2 instruktioner til alle beregninger, og især permute skal man
+lige sætte sig ind i.
+
+Der bruges lange loops flere steder for at sikre at der ikke bruges en
+emulator. Disse loops bruger registre, hvorimod en emulator ville benytte sig
+af memory. Da memory altid vil være ekstremt langsomt i forhold til registre,
+så vil et emulator-approach i hvertflad skulle optimeres.
+
+Der udregnes konstanter on-the-fly, så i stedet for f.eks.:
+
+    mov rsi, 0x100000000
+
+bruges:
+
+    ; Generate C_HEADER (0x100000000) which is just ONE more than 32 BIT
+    xor         rsi, rsi
+    dec         esi
+    inc         rsi
+
+Filheaderen er ændret efterfølgende, hvilket flere analyseprogrammer ikke var
+så vild med.
+
+Bruger SYSCALLS direkte og ikke nogle eksterne libraries, der ellers kunne
+hijackes. Da der køres på macos er disse syscalls nogle andre end man måske
+normalt ser i Linux programmer.
+
+Ændrer beregningen baseret på tidsforskelle på to forskellige måder:
+Først hvis der går for lang tid mellem 2 punkter i koden. Dvs. at nogen
+single stepper.
+Anden gang hvis nogen har ændret RDTSC-instruktionen (f.eks. i en emulator), så
+denne altid returnerer det samme. Koden til dette benytter sig af x87 FPU'en.
+Begge dele vil altså blive opfanget og ændre resultatet af den endelige
+kryptering.
+
+Flere dele af kode-flowet afgøres af sideeffekter fra bestemte CPU
+instruktioner, der f.eks. sætter eller clear'er CF eller ZF flagene.
+
+Obfuskering i form at f.eks. call-and-return-16-bytes-forward, eller JMPs frem
+og tilbage - og nogle gange JNZ baseret på sideeffekter af andre CPU
+instruktioner (se forrige punkt). Dette sætter din disassembler på prøve.
+
+Normalt i denne form for reversing opgave, vil programmet til sidst tjekke om
+input bliver transformeret til de samme bytes som en pre-defineret array. Denne
+array kan derfor normalt klippes ud af filen. I stedet har denne opgave enkodet
+selve de enkodede bytes. Disse skal altså først dekodes, før den endelige
+sammenligning.
+
+
+
+::. Sjov og spas
+-------------------------------------------------------------------------------
+Der er både en reference til den klassiske Rick Roll (never_gonna_give_you_up),
+samt Guldjul (vores jule version af Rick Roll'en).
+
+Den endelige fil indeholder lidt beskeder, som kan ses i en HEX editor:
+
+1710h: 00 00 48 65 65 65 65 65 65 65 6A 20 6D 65 64 20  ..Heeeeeeej med  
+1720h: 64 69 67 21 20 4C 65 64 65 72 20 64 75 20 65 66  dig! Leder du ef 
+1730h: 74 65 72 20 6E 6F 67 65 74 3F 20 45 6E 20 68 76  ter noget? En hv 
+1740h: 69 64 20 6A 75 6C 20 6D E5 73 6B 65 3F 20 3A 29  id jul måske? :) 
+1750h: 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D  ---------------- 
+1760h: 4C 65 64 65 72 20 64 75 20 65 66 74 65 72 20 6E  Leder du efter n 
+1770h: 6F 67 65 74 3F 20 45 6E 20 68 76 69 64 20 6A 75  oget? En hvid ju 
+1780h: 6C 20 6D E5 73 6B 65 3F 20 48 65 6C 64 20 6F 67  l måske? Held og 
+1790h: 20 6C 79 6B 6B 65 20 6D 65 64 20 6F 70 67 61 76   lykke med opgav 
+17A0h: 65 6E 2E 20 48 76 69 73 20 64 75 20 6B 6F 6D 6D  en. Hvis du komm 
+17B0h: 65 72 20 69 67 65 6E 6E 65 6D 2C 20 73 E5 20 6F  er igennem, så o 
+17C0h: 76 65 72 76 65 6A 20 61 74 20 73 6B 72 69 76 65  vervej at skrive 
+17D0h: 20 65 6E 20 77 72 69 74 65 75 70 20 28 73 65 6C   en writeup (sel 
+17E0h: 76 20 65 6E 20 6B 6F 72 74 20 65 6E 29 2E 20 53  v en kort en). S 
+17F0h: E5 64 61 6E 20 6B 61 6E 20 64 75 20 67 69 76 65  ådan kan du give 
+1800h: 20 74 69 6C 62 61 67 65 20 74 69 6C 20 64 65 74   tilbage til det 
+1810h: 20 66 E6 6C 6C 65 73 73 6B 61 62 2C 20 64 65 72   fællesskab, der 
+1820h: 20 73 69 6B 6B 65 72 74 20 6F 67 73 E5 20 68 61   sikkert også ha 
+1830h: 72 20 6C E6 72 74 20 64 69 67 20 6E 6F 67 65 74  r lært dig noget 
+
+Denne opfordring har dog ikke givet bid endnu - vi har ihvertfald ikke
+set nogle writeups endnu. Men de kan jo komme.
+
+1A90h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1AA0h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1AB0h: 43 52 65 44 69 74 5A 3A 5F 5F 5F 5F 5F 5F 5F 5F  CReDitZ:________ 
+1AC0h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1AD0h: 20 43 30 44 45 3A 20 20 20 20 20 20 20 20 20 20   C0DE:           
+1AE0h: 20 20 20 20 54 48 65 57 69 5A 72 44 20 20 20 20      THeWiZrD     
+1AF0h: 20 20 20 20 20 20 70 E5 20 20 20 20 20 20 20 20        på         
+1B00h: 20 20 20 20 73 6F 64 61 76 61 6E 64 20 20 20 20      sodavand     
+1B10h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1B20h: 20 20 54 65 53 54 3A 20 20 20 20 20 20 20 20 20    TeST:          
+1B30h: 20 20 20 20 20 2D 20 6D 72 2E 31 6F 6F 20 2D 20       - mr.1oo -  
+1B40h: 20 20 20 20 20 20 20 20 70 E5 20 20 20 20 20 20          på       
+1B50h: 20 20 20 20 6B 6C 65 6A 6E 65 72 20 20 20 20 20      klejner      
+1B60h: 20 20 20 20 20 20 28 6F 67 20 6B 61 66 27 29 20        (og kaf')  
+1B70h: 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F 5F  ________________ 
+1B80h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1B90h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+
+Jep, der blev spist mange klejner.
+
+1E50h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1E60h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1E70h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1E80h: 00 00 20 78 4E 4E 4E 4E 20 20 4E 20 00 00 00 00  .. xNNNN  N .... 
+1E90h: 00 00 20 4E 4E 4E 63 4E 20 20 4E 4E 20 00 00 00  .. NNNcN  NN ... 
+1EA0h: 00 00 20 4E 4E 4E 20 5C 4E 4E 4E 4E 20 00 00 00  .. NNN \NNNN ... 
+1EB0h: 00 00 20 78 4E 4E 63 20 20 4E 4E 63 20 00 00 00  .. xNNc  NNc ... 
+1EC0h: 00 00 20 20 20 20 20 20 20 20 20 20 00 00 00 00  ..          .... 
+1ED0h: 00 00 20 20 63 43 43 43 43 43 20 20 00 00 00 00  ..  cCCCCC  .... 
+1EE0h: 00 00 20 43 43 43 20 20 20 43 43 20 00 00 00 00  .. CCC   CC .... 
+1EF0h: 00 00 20 43 43 43 20 20 20 20 20 20 00 00 00 00  .. CCC      .... 
+1F00h: 00 00 20 43 43 43 6F 20 20 43 43 20 00 00 00 00  .. CCCo  CC .... 
+1F10h: 00 00 00 20 43 43 43 43 43 43 20 20 00 00 00 00  ... CCCCCC  .... 
+1F20h: 00 00 00 20 20 20 20 20 20 20 20 00 00 00 00 00  ...        ..... 
+1F30h: 00 00 00 20 20 20 20 20 20 20 20 00 00 00 00 00  ...        ..... 
+1F40h: 00 00 00 20 33 33 33 33 33 33 33 20 00 00 00 00  ... 3333333 .... 
+1F50h: 00 00 00 20 20 20 20 33 33 33 33 33 20 00 00 00  ...    33333 ... 
+1F60h: 00 00 20 20 20 20 33 33 33 33 6F 20 20 00 00 00  ..    3333o  ... 
+1F70h: 00 00 20 33 6F 20 20 33 33 33 33 33 20 00 00 00  .. 3o  33333 ... 
+1F80h: 00 00 20 20 33 33 33 33 33 33 20 20 00 00 00 00  ..  333333  .... 
+1F90h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1FA0h: 2D 20 44 41 4E 53 4B 20 50 4F 4C 69 54 49 20 2D  - DANSK POLiTI - 
+1FB0h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1FC0h: 20 20 20 20 20 32 20 6F 20 32 20 31 20 20 20 20       2 o 2 1     
+1FD0h: 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20                   
+1FE0h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+1FF0h: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................ 
+
+
+
+::. Overordnet flow
+-------------------------------------------------------------------------------
+
+1. Save user input at C_HEADER (0x100000000)
+2. SUB (med VPSUBB) med Rick Roll besked: "never_gonna_give_you_up!E....C.4".
+3. SUB (med VPSUBQ) med program CHECKSUM x4.
+4. XOR 1
+5. MODIFY by TIMING - Hvis der single steppes
+5. PERMUTE - F.eks.:
+
+    61 29 41 EF 5B 59 AE 93 D6 2F 54 F5 38 0F A1 9D E3 26 46 DF 40 03 A7 E1 FD 1D B3 3A 9E 32 97 CC
+
+giver:
+
+    38 0F A1 9D D6 2F 54 F5 5B 59 AE 93 61 29 41 EF 9E 32 97 CC FD 1D B3 3A 40 03 A7 E1 E3 26 46 DF
+
+Dvs.
+
+0 = 12
+1 = 13
+2 = 14
+3 = 15
+
+4 = 8
+5 = 9
+6 = 10
+7 = 11
+
+8 = 5
+9 = 6
+10 = 7
+11 = 8
+
+12 = 0
+13 = 1
+14 = 2
+15 = 3
+
+16 = 28
+17 = 29
+18 = 30
+19 = 31
+
+20 = 24
+21 = 25
+22 = 26
+23 = 27
+
+24 = 20
+25 = 21
+26 = 22
+27 = 23
+
+28 = 16
+29 = 17
+30 = 18
+31 = 19
+
+6. MODIFY by TIMING - Hvis der er ændret på RDTSC, så den f.eks. altid
+returnerer det samme. Bruger x87.
+
+7. Unpack CORRECT BYTES
+8. COMPARE og vis en EMOJI baseret på resultatet.
+
+
+
+::. Løst internt via
+-------------------------------------------------------------------------------
+Blev løst internt ved at bruge Ida Pro til macos for at udrede de forskellige
+udregningstrin.
+
+Den største udfordring var at få fat i hashværdien af programmet, da man jo
+ikke kunne debugge eller attache. Man kunne f.eks. heller ikke lige lave en
+jmp-to-self, da det jo også ville ødelægge hashværdien.
+Dette blev til sidst løst ved at bruge HW BPs lige før de 2 PTRACES. Ved hits
+blev instruction pointeren bare ændret til efter hvert af disse checks.
+
+
+
+::. Flaget
+-------------------------------------------------------------------------------
+Endeligt er flaget:
+
+    nc3{arm_er_c00l_men_x64_styrer_vildt_i_2o21}
+
+Flaget er et hint til en anden reversing opgave, der dog til sidst kom på
+ventelisten, da der ellers ville være for mange opgaver i denne kategori.
+
+Til syvende og sidst er flaget et udtryk for at ARM bruges mere og mere, men at
+x86 altid vil have en speciel plads for nogle af os.
+
+
+Vi ses!
+
+-mr.1oo- (nu på løbebånd ;)
+
+.::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::..::
