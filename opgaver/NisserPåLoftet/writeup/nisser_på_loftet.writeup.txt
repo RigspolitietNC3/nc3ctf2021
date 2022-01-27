@@ -1,0 +1,21 @@
+Vi får:
+
+
+0 = 3
+1 = n
+2 = {
+3 = c
+4 = }
+5 = _
+6 = c
+7 = u
+8 = d
+9 = r
+
+
+1302651758094
+
+
+Dvs. at talrækken skal bruge tabellen for at erstatte et tal med et TEGN:
+
+nc3{c_nu_d3r}

@@ -1,0 +1,8 @@
+Navn  : Total Begynder
+Point : 100 (Begynder)
+Løste : 404
+
+
+Hent filen og læs beskrivelsen, så er du i gang.
+
+Husk at flaget er inklusiv "nc3{" og til sidst et }-tegn.

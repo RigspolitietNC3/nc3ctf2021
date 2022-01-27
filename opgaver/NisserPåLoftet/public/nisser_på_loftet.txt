@@ -1,0 +1,16 @@
+Er det bare os, der har fået nisser på loftet, eller giver det her rent faktisk god mening?:
+
+
+0 = 3
+1 = n
+2 = {
+3 = c
+4 = }
+5 = _
+6 = c
+7 = u
+8 = d
+9 = r
+
+
+1302651758094

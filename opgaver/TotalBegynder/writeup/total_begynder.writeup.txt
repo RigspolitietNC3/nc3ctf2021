@@ -1,0 +1,15 @@
+Vi får teksten:
+
+
+	}ted_ederalk_gej{3cn
+
+
+Vi ved at "flaget" skal starte med: nc3{
+
+Dvs. at slutningen på teksten matcher i omvendt rækkefølge:
+
+	nc3{
+
+Næste er et 'j', osv.:
+
+	nc3{jeg_klarede_det}

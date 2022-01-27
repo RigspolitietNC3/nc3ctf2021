@@ -1,0 +1,6 @@
+Navn  : Regnearket
+Point : 200 (Øvet)
+Løste : 92
+
+
+Mystisk Excel-fil

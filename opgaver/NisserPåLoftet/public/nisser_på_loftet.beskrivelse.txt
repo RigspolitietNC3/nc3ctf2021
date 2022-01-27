@@ -1,0 +1,6 @@
+Navn  : Nisser På Loftet
+Point : 100 (Begynder)
+Løste : 381
+
+
+Er det nisser eller rotter, der er på loftet?
